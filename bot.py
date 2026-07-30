@@ -3,10 +3,10 @@ import smtplib
 import os
 from email.mime.text import MIMEText
 from datetime import datetime, timedelta, timezone
+from urllib.parse import quote
 
 QUERY = "computación OR tecnología OR software"
-FEED_URL = f"https://news.google.com/rss/search?q={QUERY}+when:1d&hl=es-419&gl=MX&ceid=MX:es-419"
-
+FEED_URL = f"https://news.google.com/rss/search?q={quote(QUERY)}+when:1d&hl=es-419&gl=MX&ceid=MX:es-419"
 def obtener_noticias():
     feed = feedparser.parse(FEED_URL)
     noticias = []
