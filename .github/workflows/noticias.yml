@@ -1,0 +1,28 @@
+name: Enviar noticias diarias
+
+on:
+  schedule:
+    - cron: "0 13 * * *"   # 7:00 AM hora Ciudad de México (UTC-6)
+  workflow_dispatch:        # permite correrlo manualmente para probar
+
+jobs:
+  enviar-noticias:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Construir la imagen Docker
+        run: docker build -t bot-noticias .
+
+      - name: Correr el contenedor
+        env:
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_APP_PASSWORD: ${{ secrets.EMAIL_APP_PASSWORD }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          docker run \
+            -e EMAIL_FROM \
+            -e EMAIL_APP_PASSWORD \
+            -e EMAIL_TO \
+            bot-noticias
